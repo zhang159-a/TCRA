@@ -1,0 +1,70 @@
+# 数据集配置
+dataset: WN18RR # 默认数据集
+dataset_dir: ../data/ # 数据集目录,这里存在linux和windows的路径的不同
+dataset_list: # 支持的数据集列表
+  - FB15k-237
+  - WN18RR
+
+# embedding 100-500
+# 模型配置
+model: TCRA
+model_list:
+  - TCRA
+h_dim: 100 # 隐藏层维度
+s_dim: 100 # 全局节点表示维度
+kg_layer: 2 # 知识图谱GNN层数
+out_channel: 32 # ConvE解码器输出通道数
+ker_sz: 3 # ConvE解码器卷积核大小
+label_smooth: 0.1 # 标签平滑
+
+# 规则配置
+rule_dim: 100 # 规则嵌入维度
+rule_hidden_dim: 100 # 规则层隐藏维度
+rule_heads: 4 # 规则注意力头数
+rule_layers: 4 # 规则Transformer层数
+rule_drop: 0.1 # 规则层dropout率
+rule_len: 10 # 规则最大长度
+# TODO 不清楚
+rules_num: 1000 # 规则数量 7382个规则体 1000-7000
+num_encoder: 2 # 规则编码器层数 【2-7】
+
+# 训练配置
+device: cuda # 训练设备
+epoch: 100 # 训练轮数
+batch_size: 8 # 批次大小
+learning_rate: 0.001 # 学习率
+warmup_epoch: 5 # 预热轮数
+max_no_improve: 10 # 早停轮数
+cpu_worker_num: 8 # 数据加载线程数
+
+# 模型组件配置
+decoder: ConvE # 解码器类型 [TransE, DistMult, ConvE]
+comp_op: mul # 组合操作 [add, mul]
+pred_rel_w: true # 是否使用关系权重预测
+rm_rate: 0.0 # 边移除率
+
+# Dropout配置
+ent_drop: 0.2 # 实体嵌入dropout
+rel_drop: 0.2 # 关系嵌入dropout
+conv_drop: 0.1
+fc_drop: 0.1
+ent_drop_pred: 0.1 # 实体预测dropout
+
+# decoder配置
+# ConvE输入2d维度 k_h * k_w = h_dim
+k_h: 10
+k_w: 10
+
+# TransE边界参数gamma
+# 边界参数，帮助模型区分正负样本的距离
+gamma: 12
+
+# 其他配置
+bn: true # 是否使用批归一化
+
+# Hydra配置
+hydra:
+  job:
+    chdir: false # 保持当前的工作目录行为
+  run:
+    dir: ../outputs # 输出目录
