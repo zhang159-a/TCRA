@@ -19,7 +19,7 @@ model_list:
   - TCRA
 
 # TODO 全局的配置
-# epoch: 800 # 训练轮数
+epoch: 10 # 训练轮数
 # batch_size: 256 # 批次大小
 # learning_rate: 1.5e-3 # 学习率
 # h_dim: 200 # 节点维度
