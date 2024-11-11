@@ -140,6 +140,7 @@ def main(config: DictConfig):
     src, dst, rel, hr2eid, rt2eid = construct_kg("train", directed=False)
     kg = get_kg(src, dst, rel, device)
 
+    # rules: [idx rule_head rule_body]
     rules = read_rules()
     ruleset = RuleDataset(rules)
     g = GloNode()
@@ -183,6 +184,7 @@ def main(config: DictConfig):
     for epoch in range(n_epoch):
         loss_list = []
         for batch_data in train_loader:
+            # batch_data: (src, rel, dst), label, rm_edges
             # ruleset = RuleDataset(rules)
             train_log = train_step(
                 model,

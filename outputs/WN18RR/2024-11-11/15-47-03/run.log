@@ -1,0 +1,104 @@
+[2024-11-11 15:47:08,895][root][INFO] - 
+------Config------
+ {'dataset': 'WN18RR', 'epoch': 10, 'batch_size': 16, 'learning_rate': 0.0015, 'h_dim': 200, 'pred_rel_w': True, 'label_smooth': 0.1, 'kg_layer': 2, 'rm_rate': 0.5, 'ent_drop': 0.2, 'rel_drop': 0, 'comp_op': 'mul', 'bn': True, 'k_h': 10, 'k_w': 20, 'ent_drop_pred': 0.3, 'conv_drop': 0.1, 'fc_drop': 0.4, 'ker_sz': 7, 'out_channel': 250, 'model': 'TCRA', 's_dim': 200, 'decoder': 'ConvE', 'device': 0, 'warmup_epoch': 5, 'max_no_improve': 10, 'cpu_worker_num': 6, 'rule_dim': 200, 'rule_hidden_dim': 200, 'rule_heads': 2, 'rule_layers': 4, 'rule_drop': 0.1, 'rule_len': 10, 'rules_num': 3000, 'num_encoder': 2, 'gamma': 12}
+[2024-11-11 15:47:08,897][root][INFO] - Code dir path: D:\GitHub\TCRA\code
+[2024-11-11 15:47:08,898][root][INFO] - Config dir path: D:\GitHub\TCRA\config
+[2024-11-11 15:47:08,899][root][INFO] - Model save path: D:\GitHub\TCRA\code
+[2024-11-11 15:47:11,036][root][INFO] - Number of parameters: 27813352
+[2024-11-11 15:47:22,047][root][INFO] - ---Load Rules---
+[2024-11-11 15:47:23,680][root][INFO] - # rules: 7382
+[2024-11-11 16:20:35,759][root][INFO] - kg # node: 40943
+[2024-11-11 16:20:36,185][root][INFO] - kg # edge: 173670
+[2024-11-11 16:20:39,318][root][INFO] - kg # zero deg node: 384
+[2024-11-11 16:20:46,002][root][INFO] - ---Load Train Data---
+[2024-11-11 16:21:14,281][root][INFO] - -----Model Parameter Configuration-----
+[2024-11-11 16:21:22,717][root][INFO] - Parameter ent_emb: torch.Size([40943, 200]), require_grad = True
+[2024-11-11 16:21:22,719][root][INFO] - Parameter ent_emb1: torch.Size([40943, 200]), require_grad = True
+[2024-11-11 16:21:22,719][root][INFO] - Parameter r_rel_emb: torch.Size([23, 200]), require_grad = True
+[2024-11-11 16:21:22,720][root][INFO] - Parameter rel_w: torch.Size([400, 200]), require_grad = True
+[2024-11-11 16:21:22,720][root][INFO] - Parameter rel_embs.0: torch.Size([23, 200]), require_grad = True
+[2024-11-11 16:21:22,721][root][INFO] - Parameter rel_embs.1: torch.Size([23, 200]), require_grad = True
+[2024-11-11 16:21:22,721][root][INFO] - Parameter edge_layers.0.neigh_w: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,722][root][INFO] - Parameter edge_layers.0.bn.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,722][root][INFO] - Parameter edge_layers.0.bn.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,723][root][INFO] - Parameter edge_layers.1.neigh_w: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,723][root][INFO] - Parameter edge_layers.1.bn.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,723][root][INFO] - Parameter edge_layers.1.bn.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,724][root][INFO] - Parameter node_layers.0.neigh_w: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,724][root][INFO] - Parameter node_layers.0.bn.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,724][root][INFO] - Parameter node_layers.0.bn.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,725][root][INFO] - Parameter node_layers.1.neigh_w: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,725][root][INFO] - Parameter node_layers.1.bn.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,726][root][INFO] - Parameter node_layers.1.bn.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,726][root][INFO] - Parameter comp_layers.0.neigh_w: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,727][root][INFO] - Parameter comp_layers.0.bn.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,728][root][INFO] - Parameter comp_layers.0.bn.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,728][root][INFO] - Parameter comp_layers.1.neigh_w: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,729][root][INFO] - Parameter comp_layers.1.bn.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,729][root][INFO] - Parameter comp_layers.1.bn.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,730][root][INFO] - Parameter rule_layer.fc_R.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,731][root][INFO] - Parameter rule_layer.fc_R.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,731][root][INFO] - Parameter rule_layer.fc1.weight: torch.Size([200, 2000]), require_grad = True
+[2024-11-11 16:21:22,731][root][INFO] - Parameter rule_layer.fc1.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,732][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc_Q.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,732][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc_Q.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,733][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc_K.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,733][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc_K.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,734][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc_V.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,734][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc_V.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,734][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,735][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.fc.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,735][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.layer_norm.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,736][root][INFO] - Parameter rule_layer.rule_transformer.encoder.attention.layer_norm.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,736][root][INFO] - Parameter rule_layer.rule_transformer.encoder.feed_forward.fc1.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,737][root][INFO] - Parameter rule_layer.rule_transformer.encoder.feed_forward.fc1.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,737][root][INFO] - Parameter rule_layer.rule_transformer.encoder.feed_forward.fc2.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,738][root][INFO] - Parameter rule_layer.rule_transformer.encoder.feed_forward.fc2.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,739][root][INFO] - Parameter rule_layer.rule_transformer.encoder.feed_forward.layer_norm.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,739][root][INFO] - Parameter rule_layer.rule_transformer.encoder.feed_forward.layer_norm.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,740][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc_Q.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,740][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc_Q.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,741][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc_K.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,742][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc_K.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,742][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc_V.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,743][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc_V.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,743][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,744][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.fc.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,744][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.layer_norm.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,745][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.attention.layer_norm.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,745][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.feed_forward.fc1.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,746][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.feed_forward.fc1.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,746][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.feed_forward.fc2.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,746][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.feed_forward.fc2.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,747][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.feed_forward.layer_norm.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,747][root][INFO] - Parameter rule_layer.rule_transformer.encoders.0.feed_forward.layer_norm.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,748][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc_Q.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,748][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc_Q.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,749][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc_K.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,749][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc_K.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,750][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc_V.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,750][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc_V.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,750][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,751][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.fc.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,751][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.layer_norm.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,751][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.attention.layer_norm.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,752][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.feed_forward.fc1.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,752][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.feed_forward.fc1.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,753][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.feed_forward.fc2.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,754][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.feed_forward.fc2.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,755][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.feed_forward.layer_norm.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,755][root][INFO] - Parameter rule_layer.rule_transformer.encoders.1.feed_forward.layer_norm.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,756][root][INFO] - Parameter rule_layer.rule_transformer.fc1.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,758][root][INFO] - Parameter rule_layer.rule_transformer.fc1.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,758][root][INFO] - Parameter global_layer.s_w: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,758][root][INFO] - Parameter global_layer.fc_R.weight: torch.Size([200, 200]), require_grad = True
+[2024-11-11 16:21:22,759][root][INFO] - Parameter global_layer.fc_R.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,759][root][INFO] - Parameter predictor.bn0.weight: torch.Size([1]), require_grad = True
+[2024-11-11 16:21:22,759][root][INFO] - Parameter predictor.bn0.bias: torch.Size([1]), require_grad = True
+[2024-11-11 16:21:22,759][root][INFO] - Parameter predictor.bn1.weight: torch.Size([250]), require_grad = True
+[2024-11-11 16:21:22,760][root][INFO] - Parameter predictor.bn1.bias: torch.Size([250]), require_grad = True
+[2024-11-11 16:21:22,760][root][INFO] - Parameter predictor.bn2.weight: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,761][root][INFO] - Parameter predictor.bn2.bias: torch.Size([200]), require_grad = True
+[2024-11-11 16:21:22,761][root][INFO] - Parameter predictor.conv.weight: torch.Size([250, 1, 7, 7]), require_grad = True
+[2024-11-11 16:21:22,762][root][INFO] - Parameter predictor.fc.weight: torch.Size([200, 49000]), require_grad = True
+[2024-11-11 16:21:37,396][root][INFO] - Training... total epoch: 10, step: 64700

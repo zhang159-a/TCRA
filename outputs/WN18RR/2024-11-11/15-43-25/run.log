@@ -1,0 +1,9 @@
+[2024-11-11 15:43:33,128][root][INFO] - 
+------Config------
+ {'dataset': 'WN18RR', 'epoch': 10, 'batch_size': 16, 'learning_rate': 0.0015, 'h_dim': 200, 'pred_rel_w': True, 'label_smooth': 0.1, 'kg_layer': 2, 'rm_rate': 0.5, 'ent_drop': 0.2, 'rel_drop': 0, 'comp_op': 'mul', 'bn': True, 'k_h': 10, 'k_w': 20, 'ent_drop_pred': 0.3, 'conv_drop': 0.1, 'fc_drop': 0.4, 'ker_sz': 7, 'out_channel': 250, 'model': 'TCRA', 's_dim': 200, 'decoder': 'ConvE', 'device': 0, 'warmup_epoch': 5, 'max_no_improve': 10, 'cpu_worker_num': 6, 'rule_dim': 200, 'rule_hidden_dim': 200, 'rule_heads': 2, 'rule_layers': 4, 'rule_drop': 0.1, 'rule_len': 10, 'rules_num': 3000, 'num_encoder': 2, 'gamma': 12}
+[2024-11-11 15:43:33,129][root][INFO] - Code dir path: D:\GitHub\TCRA\code
+[2024-11-11 15:43:33,131][root][INFO] - Config dir path: D:\GitHub\TCRA\config
+[2024-11-11 15:43:33,132][root][INFO] - Model save path: D:\GitHub\TCRA\code
+[2024-11-11 15:43:36,808][root][INFO] - Number of parameters: 27813352
+[2024-11-11 15:43:40,778][root][INFO] - ---Load Rules---
+[2024-11-11 15:43:40,805][root][INFO] - # rules: 7382

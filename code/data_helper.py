@@ -200,6 +200,9 @@ def get_kg(src, dst, rel, device):
     return kg
 
 
+# TODO 读取规则文件 7382
+
+
 def read_rules():
     """
     read rule from file
@@ -377,16 +380,21 @@ class RuleDataset(Dataset):
 
         for i in range(self.rules_num):
             self.rules[i][0] = i
+        # mask for padding,得到每个规则的长度 len(r) - 2
         self.rules_mask = [torch.ones(len(r) - 2).bool() for r in self.rules]
 
+        # padding 用 2 * n_rel填充，为当前的规则最大长度 (rule_num, max_len)
         self.R = pad_sequence(
             [torch.LongTensor(r) for r in self.rules],
             batch_first=True,
             padding_value=self.padding_idx,
-        )  # padding_value=474
+        )  # padding_value=474/22
+        # mask for padding (rule_num, max_len - 2)
         self.R_mask = pad_sequence(
             [m for m in self.rules_mask], batch_first=True, padding_value=False
         )
+        # IM: (rule_num, 2 * n_rel)
+        # 知道规则和哪一个关系 即规则头
         self.IM = torch.zeros(self.rules_num, self.n_rel * 2)
         self.IM[self.R[:, 0], self.R[:, 1]] = 1
 
