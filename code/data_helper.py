@@ -1,18 +1,18 @@
 import logging
+import math
+import random
+from collections import defaultdict
+from itertools import chain
+from os.path import join
+from typing import List, Tuple
+
+import dgl
 import numpy as np
 import torch
-from torch import tensor
-from os.path import join
 import utils
-from typing import Tuple, List
-from torch.utils.data import Dataset
-from itertools import chain
-import dgl
-from collections import defaultdict
-import math
+from torch import tensor
 from torch.nn.utils.rnn import pad_sequence
-import random
-
+from torch.utils.data import Dataset
 
 '''
 def construct_dict(dir_path):
@@ -43,6 +43,7 @@ def construct_dict(dir_path):
     return ent2id, rel2id
 '''
 
+
 def construct_dict(dir_path):
     """
     construct the entity, relation dict
@@ -52,24 +53,29 @@ def construct_dict(dir_path):
     ent2id, rel2id = dict(), dict()
 
     # index entities / relations in the occurence order in train, valid and test set
-    ent_path, rel_path = join(dir_path, 'entities.dict'), join(dir_path, 'relations.dict')
-    with open(ent_path, 'r', encoding='utf-8') as f:
+    ent_path, rel_path = join(dir_path, "entities.dict"), join(
+        dir_path, "relations.dict"
+    )
+    with open(ent_path, "r", encoding="utf-8") as f:
         i = 0
         for line in f:
-            ent= line.strip().split('\t')[1]
+            ent = line.strip().split("\t")[1]
             ent2id[ent] = i
             i += 1
-    with open(rel_path, 'r', encoding='utf-8') as f:
+    with open(rel_path, "r", encoding="utf-8") as f:
         i = 0
         for line in f:
-            rel= line.strip().split('\t')[1]
+            rel = line.strip().split("\t")[1]
             rel2id[rel] = i
             i += 1
-                  
+
     # arrange the items in id order
-    ent2id, rel2id = dict(sorted(ent2id.items(), key=lambda x: x[1])), dict(sorted(rel2id.items(), key=lambda x: x[1]))
+    ent2id, rel2id = dict(sorted(ent2id.items(), key=lambda x: x[1])), dict(
+        sorted(rel2id.items(), key=lambda x: x[1])
+    )
 
     return ent2id, rel2id
+
 
 def read_data(set_flag):
     """
@@ -78,30 +84,33 @@ def read_data(set_flag):
     :return:
     """
     assert set_flag in [
-        'train', 'valid', 'test',
-        ['train', 'valid'], ['train', 'valid', 'test']
+        "train",
+        "valid",
+        "test",
+        ["train", "valid"],
+        ["train", "valid", "test"],
     ]
     cfg = utils.get_global_config()
     dir_p = join(cfg.dataset_dir, cfg.dataset)
     ent2id, rel2id = construct_dict(dir_p)
 
     # read the file
-    if set_flag in ['train', 'valid', 'test']:
-        path = join(dir_p, '{}.txt'.format(set_flag))
-        file = open(path, 'r', encoding='utf-8')
-    elif set_flag == ['train', 'valid']:
-        path1 = join(dir_p, 'train.txt')
-        path2 = join(dir_p, 'valid.txt')
-        file1 = open(path1, 'r', encoding='utf-8')
-        file2 = open(path2, 'r', encoding='utf-8')
+    if set_flag in ["train", "valid", "test"]:
+        path = join(dir_p, "{}.txt".format(set_flag))
+        file = open(path, "r", encoding="utf-8")
+    elif set_flag == ["train", "valid"]:
+        path1 = join(dir_p, "train.txt")
+        path2 = join(dir_p, "valid.txt")
+        file1 = open(path1, "r", encoding="utf-8")
+        file2 = open(path2, "r", encoding="utf-8")
         file = chain(file1, file2)
-    elif set_flag == ['train', 'valid', 'test']:
-        path1 = join(dir_p, 'train.txt')
-        path2 = join(dir_p, 'valid.txt')
-        path3 = join(dir_p, 'test.txt')
-        file1 = open(path1, 'r', encoding='utf-8')
-        file2 = open(path2, 'r', encoding='utf-8')
-        file3 = open(path3, 'r', encoding='utf-8')
+    elif set_flag == ["train", "valid", "test"]:
+        path1 = join(dir_p, "train.txt")
+        path2 = join(dir_p, "valid.txt")
+        path3 = join(dir_p, "test.txt")
+        file1 = open(path1, "r", encoding="utf-8")
+        file2 = open(path2, "r", encoding="utf-8")
+        file3 = open(path3, "r", encoding="utf-8")
         file = chain(file1, file2, file3)
     else:
         raise NotImplementedError
@@ -114,7 +123,7 @@ def read_data(set_flag):
     pos_rels = defaultdict(set)
 
     for i, line in enumerate(file):
-        h, r, t = line.strip().split('\t')
+        h, r, t = line.strip().split("\t")
         h, r, t = ent2id[h], rel2id[r], ent2id[t]
         src_list.append(h)
         dst_list.append(t)
@@ -124,22 +133,22 @@ def read_data(set_flag):
         # (h, r, ?) -> t, (?, r, t) -> h
         pos_tails[(h, r)].add(t)
         pos_heads[(r, t)].add(h)
-        pos_rels[(h, t)].add(r) 
-        pos_rels[(t, h)].add(r+len(rel2id))  
+        pos_rels[(h, t)].add(r)
+        pos_rels[(t, h)].add(r + len(rel2id))
 
     output_dict = {
-        'src_list': src_list,     
-        'dst_list': dst_list,     
-        'rel_list': rel_list,     
-        'pos_tails': pos_tails,   
-        'pos_heads': pos_heads,
-        'pos_rels': pos_rels
+        "src_list": src_list,
+        "dst_list": dst_list,
+        "rel_list": rel_list,
+        "pos_tails": pos_tails,
+        "pos_heads": pos_heads,
+        "pos_rels": pos_rels,
     }
 
     return output_dict
 
 
-def construct_kg(set_flag, directed=False):   
+def construct_kg(set_flag, directed=False):
     """
     construct kg.
     :param set_flag: train / valid / test set flag, use which set data to construct kg.
@@ -150,7 +159,7 @@ def construct_kg(set_flag, directed=False):
     assert directed in [True, False]
     cfg = utils.get_global_config()
     dataset = cfg.dataset
-    n_rel = utils.DATASET_STATISTICS[dataset]['n_rel']
+    n_rel = utils.DATASET_STATISTICS[dataset]["n_rel"]
 
     d = read_data(set_flag)
     src_list, dst_list, rel_list = [], [], []
@@ -158,19 +167,19 @@ def construct_kg(set_flag, directed=False):
     # eid: record the edge id of queries, for randomly removing some edges when training
     eid = 0
     hr2eid, rt2eid = defaultdict(list), defaultdict(list)
-    for h, t, r in zip(d['src_list'], d['dst_list'], d['rel_list']):
-        if directed: 
+    for h, t, r in zip(d["src_list"], d["dst_list"], d["rel_list"]):
+        if directed:
             src_list.extend([h])
             dst_list.extend([t])
             rel_list.extend([r])
             hr2eid[(h, r)].extend([eid])
             rt2eid[(r, t)].extend([eid])
             eid += 1
-        else:   
+        else:
             # include the inverse edges
             # inverse rel id: original id + rel num
-            src_list.extend([h, t])   # source entity
-            dst_list.extend([t, h])   # destination entity
+            src_list.extend([h, t])  # source entity
+            dst_list.extend([t, h])  # destination entity
             rel_list.extend([r, r + n_rel])
             hr2eid[(h, r)].extend([eid, eid + 1])
             rt2eid[(r, t)].extend([eid, eid + 1])
@@ -184,11 +193,12 @@ def construct_kg(set_flag, directed=False):
 def get_kg(src, dst, rel, device):
     cfg = utils.get_global_config()
     dataset = cfg.dataset
-    n_ent = utils.DATASET_STATISTICS[dataset]['n_ent']
+    n_ent = utils.DATASET_STATISTICS[dataset]["n_ent"]
     kg = dgl.graph((src, dst), num_nodes=n_ent)
-    kg.edata['rel_id'] = rel
+    kg.edata["rel_id"] = rel
     kg = kg.to(device)
     return kg
+
 
 def read_rules():
     """
@@ -196,14 +206,14 @@ def read_rules():
     :return:
     list [rule_id, rule_head, rule_body]
     """
-    logging.info('---Load Rules---')
+    logging.info("---Load Rules---")
     cfg = utils.get_global_config()
     dir_p = join(cfg.dataset_dir, cfg.dataset)
-    rule_path = join(dir_p, 'mined_rules.txt')
-    
+    rule_path = join(dir_p, "mined_rules.txt")
+
     rules = list()
     idx = 0
-    with open(rule_path, 'r', encoding='utf-8') as f:
+    with open(rule_path, "r", encoding="utf-8") as f:
         for line in f:
             rule = line.strip().split()
             if len(rule) <= 1:
@@ -211,38 +221,39 @@ def read_rules():
             rule = [idx] + [int(_) for _ in rule]
             idx += 1
             rules.append(rule)
-    logging.info('# rules: {}'.format(len(rules)))
+    logging.info("# rules: {}".format(len(rules)))
     # rules: [rule_id, rule_head, rule_body]
     return rules
 
 
-class TrainDataset():
+class TrainDataset:
     """
     Training data is in query-answer format: (h, r) -> tails, (r, t) -> heads
     """
+
     def __init__(self, set_flag, hr2eid, rt2eid):
-        assert set_flag in ['train', 'valid', 'test']
-        logging.info('---Load Train Data---')
+        assert set_flag in ["train", "valid", "test"]
+        logging.info("---Load Train Data---")
         self.cfg = utils.get_global_config()
         dataset = self.cfg.dataset
-        self.n_ent = utils.DATASET_STATISTICS[dataset]['n_ent']
-        self.n_rel = utils.DATASET_STATISTICS[dataset]['n_rel']
+        self.n_ent = utils.DATASET_STATISTICS[dataset]["n_ent"]
+        self.n_rel = utils.DATASET_STATISTICS[dataset]["n_rel"]
 
         self.d = read_data(set_flag)
         self.query = []
         self.label = []
-        self.rm_edges = []    
+        self.rm_edges = []
         self.set_scaling_weight = []
 
         # pred tails
-        for k, v in self.d['pos_tails'].items():
-            self.query.append((k[0], k[1], -1))      # [[h,r,-1],[]]
-            self.label.append(list(v))               # [[t1,t2,t3,],[]]
+        for k, v in self.d["pos_tails"].items():
+            self.query.append((k[0], k[1], -1))  # [[h,r,-1],[]]
+            self.label.append(list(v))  # [[t1,t2,t3,],[]]
             # randomly removing edges later
-            self.rm_edges.append(hr2eid[k])          # [[0,4,5,],[]]
+            self.rm_edges.append(hr2eid[k])  # [[0,4,5,],[]]
 
         # pred heads
-        for k, v in self.d['pos_heads'].items():
+        for k, v in self.d["pos_heads"].items():
             # inverse relation
             self.query.append((k[1], k[0] + self.n_rel, -1))
             self.label.append(list(v))
@@ -257,7 +268,7 @@ class TrainDataset():
 
         rm_edges = torch.tensor(self.rm_edges[item], dtype=torch.int64)
         rm_num = math.ceil(rm_edges.shape[0] * self.cfg.rm_rate)
-        rm_inds = torch.randperm(rm_edges.shape[0])[:rm_num]   
+        rm_inds = torch.randperm(rm_edges.shape[0])[:rm_num]
         rm_edges = rm_edges[rm_inds]
 
         return (h, r, t), label, rm_edges
@@ -265,8 +276,10 @@ class TrainDataset():
     def get_onehot_label(self, label):
         onehot_label = torch.zeros(self.n_ent)
         onehot_label[label] = 1
-        if self.cfg.label_smooth != 0.0:       
-            onehot_label = (1.0 - self.cfg.label_smooth) * onehot_label + (1.0 / self.n_ent)
+        if self.cfg.label_smooth != 0.0:
+            onehot_label = (1.0 - self.cfg.label_smooth) * onehot_label + (
+                1.0 / self.n_ent
+            )
 
         return onehot_label
 
@@ -276,7 +289,7 @@ class TrainDataset():
         return pos_inds
 
     @staticmethod
-    def collate_fn(data):      
+    def collate_fn(data):
         src = [d[0][0] for d in data]
         rel = [d[0][1] for d in data]
         dst = [d[0][2] for d in data]
@@ -297,20 +310,23 @@ class EvalDataset(Dataset):
     Evaluating data is in triple format. Keep one for head-batch and tail-batch respectively,
     for computing each direction's metrics conveniently.
     """
+
     def __init__(self, set_flag, mode):
-        assert set_flag in ['train', 'valid', 'test']
-        assert mode in ['head_batch', 'tail_batch']
+        assert set_flag in ["train", "valid", "test"]
+        assert mode in ["head_batch", "tail_batch"]
         self.cfg = utils.get_global_config()
         dataset = self.cfg.dataset
         self.mode = mode
-        self.n_ent = utils.DATASET_STATISTICS[dataset]['n_ent']
-        self.n_rel = utils.DATASET_STATISTICS[dataset]['n_rel']
+        self.n_ent = utils.DATASET_STATISTICS[dataset]["n_ent"]
+        self.n_rel = utils.DATASET_STATISTICS[dataset]["n_rel"]
 
         self.d = read_data(set_flag)
-        self.trip = [_ for _ in zip(self.d['src_list'], self.d['rel_list'], self.d['dst_list'])]
-        self.d_all = read_data(['train', 'valid', 'test'])
-        self.pos_t = self.d_all['pos_tails']
-        self.pos_h = self.d_all['pos_heads']
+        self.trip = [
+            _ for _ in zip(self.d["src_list"], self.d["rel_list"], self.d["dst_list"])
+        ]
+        self.d_all = read_data(["train", "valid", "test"])
+        self.pos_t = self.d_all["pos_tails"]
+        self.pos_h = self.d_all["pos_heads"]
 
     def __len__(self):
         return len(self.trip)
@@ -318,16 +334,16 @@ class EvalDataset(Dataset):
     def __getitem__(self, item):
         h, r, t = self.trip[item]
 
-        if self.mode == 'tail_batch':
+        if self.mode == "tail_batch":
             # filter_bias, remove other ground truthes when ranking
-            filter_bias = np.zeros(self.n_ent, dtype=np.float)
-            filter_bias[list(self.pos_t[(h, r)])] = -float('inf')
-            filter_bias[t] = 0.
-        elif self.mode == 'head_batch':
-            filter_bias = np.zeros(self.n_ent, dtype=np.float)
-            filter_bias[list(self.pos_h[(r, t)])] = -float('inf')
-            filter_bias[h] = 0.
-            h, r, t = t, r+self.n_rel, h
+            filter_bias = np.zeros(self.n_ent, dtype=np.float64)
+            filter_bias[list(self.pos_t[(h, r)])] = -float("inf")
+            filter_bias[t] = 0.0
+        elif self.mode == "head_batch":
+            filter_bias = np.zeros(self.n_ent, dtype=np.float64)
+            filter_bias[list(self.pos_h[(r, t)])] = -float("inf")
+            filter_bias[h] = 0.0
+            h, r, t = t, r + self.n_rel, h
         else:
             raise NotImplementedError
 
@@ -353,7 +369,7 @@ class RuleDataset(Dataset):
     def __init__(self, rules):
         self.cfg = utils.get_global_config()
         dataset = self.cfg.dataset
-        self.n_rel = utils.DATASET_STATISTICS[dataset]['n_rel']
+        self.n_rel = utils.DATASET_STATISTICS[dataset]["n_rel"]
         self.padding_idx = self.n_rel * 2
         self.rules_num = self.cfg.rules_num
 
@@ -361,10 +377,16 @@ class RuleDataset(Dataset):
 
         for i in range(self.rules_num):
             self.rules[i][0] = i
-        self.rules_mask = [torch.ones(len(r)-2).bool() for r in self.rules]
+        self.rules_mask = [torch.ones(len(r) - 2).bool() for r in self.rules]
 
-        self.R = pad_sequence([torch.LongTensor(r) for r in self.rules], batch_first=True, padding_value=self.padding_idx)   # padding_value=474
-        self.R_mask = pad_sequence([m for m in self.rules_mask], batch_first=True, padding_value=False)
+        self.R = pad_sequence(
+            [torch.LongTensor(r) for r in self.rules],
+            batch_first=True,
+            padding_value=self.padding_idx,
+        )  # padding_value=474
+        self.R_mask = pad_sequence(
+            [m for m in self.rules_mask], batch_first=True, padding_value=False
+        )
         self.IM = torch.zeros(self.rules_num, self.n_rel * 2)
         self.IM[self.R[:, 0], self.R[:, 1]] = 1
 
@@ -373,6 +395,7 @@ class BiDataloader(object):
     """
     Combine the head-batch and tail-batch evaluation dataloader.
     """
+
     def __init__(self, h_loader: iter, t_loader: iter):
         self.h_loader_len = len(h_loader)
         self.t_loader_len = len(t_loader)
@@ -435,11 +458,11 @@ class GloNode(Dataset):
         self.cfg = utils.get_global_config()
         dataset = self.cfg.dataset
         device = torch.device(self.cfg.device)
-        self.n_ent = utils.DATASET_STATISTICS[dataset]['n_ent']
-        self.n_rel = utils.DATASET_STATISTICS[dataset]['n_rel']
+        self.n_ent = utils.DATASET_STATISTICS[dataset]["n_ent"]
+        self.n_rel = utils.DATASET_STATISTICS[dataset]["n_rel"]
 
-        src, dst, rel, hr2eid, rt2eid = construct_kg('train', directed=False)
+        src, dst, rel, hr2eid, rt2eid = construct_kg("train", directed=False)
 
-        self.Ht = torch.zeros(self.n_ent,self.n_rel * 2).to(device)
+        self.Ht = torch.zeros(self.n_ent, self.n_rel * 2).to(device)
         self.Ht[src, rel] = 1
         self.Ht[dst, rel] = 1

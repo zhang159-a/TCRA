@@ -20,7 +20,7 @@ model_list:
 
 # TODO 全局的配置
 epoch: 10 # 训练轮数
-# batch_size: 256 # 批次大小
+batch_size: 16 # 批次大小
 # learning_rate: 1.5e-3 # 学习率
 # h_dim: 200 # 节点维度
 # pred_rel_w: true # 是否使用关系权重预测
